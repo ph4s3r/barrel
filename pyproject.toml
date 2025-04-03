@@ -1,0 +1,16 @@
+[project]
+name = "barrel"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.9"
+
+dependencies = [
+    "fastapi>=0.115.12",
+    "gunicorn>=23.0.0",
+    "langchain>=0.3.22",
+    "langchain-openai>=0.3.12",
+    "pinecone>=6.0.2",
+    "requests>=2.32.3",
+    "uvicorn>=0.34.0",
+]
