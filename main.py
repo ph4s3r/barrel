@@ -20,17 +20,21 @@ async def user_prompt(prompt: str, mss: Mss):
 
 
     ### embedding client client START
-    return_vector = send_embedding_request(prompt)
-    print("Response Vector dim:", len(return_vector[0]))
+    return_vector_1 = send_embedding_request(prompt)
+    print("Response Vector dim:", len(return_vector_1))
+    return_vector = list()
+    return_vector.append(return_vector_1)
+    
     ### embedding client client END
 
 
     ### pinecone client START
-    pinecone_response = pc_client.query(inputvector=return_vector,top_k=3)
-    mss = 0.3
-    context_text = process_pc_qr(pinecone_response,mss=mss)
+    top_k = 3
+    pinecone_response = pc_client.query(inputvector=return_vector,top_k=top_k)
+    context_text = process_pc_qr(pinecone_response, mss=mss.mss)
     if context_text is None:
-        return Response(status_code=409, content=f"No vectors with similiarity score above the mss {mss} found")
+        scores = ", ".join(str(match.score) for match in pinecone_response.matches)
+        return Response(status_code=409, content=f"No vectors with similiarity score above the mss treshold: {mss}. MSS scores: [{scores}]")
     ### pinecone client END
 
 
@@ -39,7 +43,5 @@ async def user_prompt(prompt: str, mss: Mss):
     sp = SuperPrompt()
     outputs = sp.process_prompt(prompt, context_text)
     ### LLM client end
-
-    # breakpoint()
 
     return outputs[0]

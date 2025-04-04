@@ -4,8 +4,8 @@ import requests
 def send_embedding_request(prompt: str): 
 
     response = requests.post(
-        "http://127.0.0.1:3001/embed", 
-        json={"inputs": prompt}, 
+        "http://127.0.0.1:80/embed", 
+        json={"text": prompt}, 
         headers={"Content-Type": "application/json"}
     )
 
