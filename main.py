@@ -20,11 +20,8 @@ async def user_prompt(prompt: str, mss: Mss):
 
 
     ### embedding client client START
-    return_vector_1 = send_embedding_request(prompt)
-    print("Response Vector dim:", len(return_vector_1))
-    return_vector = list()
-    return_vector.append(return_vector_1)
-    
+    return_vector = send_embedding_request(prompt)
+    print("Response Vector dim:", len(return_vector))
     ### embedding client client END
 
 
