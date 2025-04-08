@@ -1,6 +1,6 @@
 ##########################################################################################################
 # Author: Peter Karacsonyi                                                                               #
-# Last updated: 2024 dec 28                                                                              #
+# Last updated: 2025 apr 7                                                                              #
 # Runner script for HuggingFace Embedding Inference Server                                               #
 # Main github project site: https://github.com/huggingface/text-embeddings-inference                     #
 # API endpoints: https://huggingface.github.io/text-embeddings-inference/                                #
@@ -11,14 +11,14 @@
 # 2024-12-22T22:00:29.017555Z  INFO text_embeddings_backend_candle: backends/candle/src/lib.rs:373: Starting FlashQwen2 model on Cuda(CudaDevice(DeviceId(1)))
 # 2024-12-22T22:05:36.201611Z  INFO text_embeddings_router: router/src/lib.rs:248: Warming up model
 
-# or 20+ mins
+# or 20+ mins, after warming up
 # 2025-04-03T13:59:39.238702Z  INFO text_embeddings_router: router/src/lib.rs:252: Warming up model
 # 2025-04-03T14:19:01.323126Z  INFO text_embeddings_router::http::server: router/src/http/server.rs:1804: Starting HTTP server: 0.0.0.0:3000
 
 # Dynamically set the location to the directory of this script
 Set-Location -Path $PSScriptRoot
 
-$model = "dunzhang/stella_en_1.5B_v5"
+$model = "NovaSearch/stella_en_1.5B_v5"
 $volume = "${PSScriptRoot}\models\" # Use the script's location for models directory
 $prompt_name = "s2p_query"
 # either we use the default_prompt of the name
