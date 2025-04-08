@@ -13,9 +13,9 @@ class PineConeClient():
     def __init__(self) -> None:
         self.max_batch_size = 100
         self.api_key = "pcsk_2p2Lhv_3ZTxXTDWt7aefE5yZqCrfRjCd1dqoamhLxuKoJb7qqcZvYRYbuTgHuNz4WeVs2w"
-        self.index_name = "discovery"
+        self.index_name = "voyage1024"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
-        self.namespace = "azuredocs"
+        self.namespace = "vnets1024"
         self.cached_vectors = {}
 
         # this value should be coming from the local cache

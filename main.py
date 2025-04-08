@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Response
 
-from embedding_client import send_embedding_request
+from embedding_client_voyage import send_embedding_request
 from vectordb_client import PineConeClient, process_pc_qr
 from llm_client import SuperPrompt
 from request_models import Mss
