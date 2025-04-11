@@ -29,6 +29,8 @@ async def user_prompt(prompt: str, mss: Mss):
     top_k = 3
     pinecone_response = pc_client.query(inputvector=return_vector,top_k=top_k)
     context_text = process_pc_qr(pinecone_response, mss=mss.mss)
+    vector_ids = [item.id for item in pinecone_response._data_store['matches']]
+    print("vector ids:", vector_ids)
     if context_text is None:
         scores = ", ".join(str(match.score) for match in pinecone_response.matches)
         return Response(status_code=409, content=f"No vectors with similiarity score above the mss treshold: {mss}. MSS scores: [{scores}]")
