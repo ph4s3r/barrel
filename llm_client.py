@@ -5,7 +5,7 @@ from langchain.prompts import ChatPromptTemplate
 class SuperPrompt():
     def __init__(self) -> None:
 
-        model="o1"
+        model="gpt-4o"
         api_key = "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"
         model_temperature = 0.0
 
@@ -51,15 +51,9 @@ class SuperPrompt():
             return [llm_output]
         else:
             FALLBACKPROMPT = """
-            Please state that 'We don't have information about this in our vector store' verbatim, and offer the user respond  
-            based on your general training data:
-            {question}.
-            Then please cite or offer any links, where the latest / most accurate information could be possibly retrieved.
-            Many documentations are available on github - usually maintained in markdown format. If you have an idea that the
-            documentation is available like that, and you have an exact link, then offer an option to like 
-            'I found the official documentation on xyz.github.com/project. Do you want to ingest that to the vector store and 
-            search the answer from it?' Please don't offer the option to download anything from github if you have no concrete link
-            to the most relevant possible repositories.
+            Please state that 
+            'We don't have information about this in our vector store'
+            verbatim. Do not add any other information to the response.
             """
             SUPERPROMPT = ChatPromptTemplate.from_template(FALLBACKPROMPT)
             prompt = SUPERPROMPT.format(question=prompt)
