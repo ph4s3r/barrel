@@ -5,7 +5,7 @@ from langchain.prompts import ChatPromptTemplate
 class SuperPrompt():
     def __init__(self) -> None:
 
-        model="gpt-4o"
+        model="o1"
         api_key = "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"
         model_temperature = 0.0
 
@@ -24,7 +24,7 @@ class SuperPrompt():
         if context_text is not None:
 
             SUPERPROMPT = """
-            answer the question based only on the following retrieved documents: the bigger the similarity score the more relevant the content is.
+            answer the question based only on the following context from a vector store: the bigger the similarity score the more relevant the content is.
             {context_text}
             answer the question based on the above context: {question}.
             provide a detailed answer.
@@ -51,8 +51,8 @@ class SuperPrompt():
             return [llm_output]
         else:
             FALLBACKPROMPT = """
-            Please state that there is no relevant enough information available in our vector index to answer this question, so 
-            please try answering the question based on your general training data:
+            Please state that 'We don't have information about this in our vector store' verbatim, and offer the user respond  
+            based on your general training data:
             {question}.
             Then please cite or offer any links, where the latest / most accurate information could be possibly retrieved.
             Many documentations are available on github - usually maintained in markdown format. If you have an idea that the
