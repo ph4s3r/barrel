@@ -15,7 +15,7 @@ async def user_prompt(
     prompt: str,
     args: PromptArgs,
     client = Depends(get_embedder_client),
-    pc_client: PineConeClient = Depends(get_pinecone_client),
+    pc_client: PineConeClient = Depends(get_pinecone_client)
 ):
     """Endpoint for processing user prompts."""
     ### embedding client client START

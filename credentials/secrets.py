@@ -37,6 +37,7 @@ def get_private_key(file_path: Path) -> bytes:
 
     return private_key
 
+
 def decrypt_secrets(private_key: str | bytes) -> None:
     """Decrypt the private key and load them as env variables."""
     cipher_suit = Fernet(private_key)
@@ -57,8 +58,7 @@ class Secret:
         """Load secrets from env variables."""
         self.embedder_client_api_key = os.environ["EMBEDDER_API_KEY"]
         self.vector_db_api_key = os.environ["VECTOR_DB_API_KEY"]
-        # Evaluator LLM API key is optional
-        self.test_eval_llm_api_key = os.getenv("TEST_EVALUATOR_LLM_API_KEY")
+        self.llm_api_key = os.environ["LLM_API_KEY"]
 
 
 if dot_env_file.exists():

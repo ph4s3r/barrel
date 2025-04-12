@@ -64,7 +64,7 @@ class PineConeClient:
 
     def return_sources(self):
         """
-        Returns the sources from metadata of the vector embeddings 
+        Returns the sources from metadata of the vector embeddings
 
         Args:
             no args
@@ -136,7 +136,7 @@ class PineConeClient:
             cache_fully_synced = False
 
         return cache_fully_synced
-    
+
 
 def process_pc_qr(pinecone_response, mss: float) -> str | None:
     """
@@ -153,13 +153,13 @@ def process_pc_qr(pinecone_response, mss: float) -> str | None:
     for i, match in enumerate(relevant_vectors, start=1):
         metadata = match.metadata
         score = match.score
-        
+
         # Define important fields to extract
         important_fields = ["title", "main_header", "description", "header_0", "header_1", "header_2", "content"]
         extracted_fields = {key: metadata.get(key, "N/A") for key in important_fields}
-        
+
         source = metadata.get("source", "Unknown")
-        
+
         # Construct the context string
         context_str = (f"#### Context {i} BEGIN ####\n"
                        f"Title: {extracted_fields['title']}\n"

@@ -1,0 +1,11 @@
+testName: Azure Networking Questions
+questions:
+  - question: Does Azure reserve IP addresses in each subnet?
+    answer: >
+      Yes, it reserves five IP addresses per subnet.
+      The first, last, and three additional addresses are reserved.
+
+  - question: Are user-defined routes (UDRs) mandatory in all Azure network setups?
+    answer: >
+      No, default system routes often suffice.
+      UDRs are only needed for custom routing scenarios.

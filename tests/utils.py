@@ -42,21 +42,21 @@ def load_test_suit(yaml_file: Path) -> list[TestCase]:
 
 def display_table(test_suit: list[TestCase]):
     """Print the evaluation results to the console in a nice table format."""
-    table = Table(title="Test Results")
+    table = Table(title="Test Results", show_lines=True)
 
-    table.add_column("Question", style="magenta")
-    table.add_column("Reference Answer", style="green")
-    table.add_column("LLM Answer", style="yellow")
-    table.add_column("Evaluation", style="green")
-    table.add_column("Rating", style="green")
+    table.add_column("Question", style="magenta", justify="full")
+    table.add_column("Reference Answer", style="green", justify="full")
+    table.add_column("LLM Answer", style="yellow", justify="full")
+    table.add_column("Rating", style="green", justify="center", highlight=True)
+    table.add_column("Evaluation", style="green", justify="full")
 
     for tc in test_suit:
         table.add_row(
             tc["question"],
             tc["reference_answer"],
             tc["llm_answer"],
-            tc["eval_explanation"],
-            str(tc["rating"])
+            str(tc["rating"]),
+            tc["eval_explanation"]
         )
 
     console = Console()

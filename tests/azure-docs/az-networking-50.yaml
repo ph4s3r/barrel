@@ -246,5 +246,3 @@ questions:
   - question: Can I perform WAN optimization between virtual networks or between a virtual network and my on-premises datacenter?
     answer: >
       Yes. You can deploy a network virtual appliance for WAN optimization from several vendors through Azure Marketplace. 
-
-  
