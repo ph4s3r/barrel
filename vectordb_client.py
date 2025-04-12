@@ -1,18 +1,17 @@
-# import sys
-# sys.dont_write_bytecode = True
-
 import os
 import pickle
 import pprint
 from collections import Counter
+
 from pinecone import Pinecone
 
+from credentials.secrets import secrets
 
-class PineConeClient():
+
+class PineConeClient:
 
     def __init__(self) -> None:
         self.max_batch_size = 100
-        self.api_key = "pcsk_2p2Lhv_3ZTxXTDWt7aefE5yZqCrfRjCd1dqoamhLxuKoJb7qqcZvYRYbuTgHuNz4WeVs2w"
         self.index_name = "voyage1024"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
         self.namespace = "vnets1024"
@@ -25,7 +24,7 @@ class PineConeClient():
 
         # this data should be coming from the api
         self.ns_vectorcount = None
-        self.pc = Pinecone(api_key=self.api_key)
+        self.pc = Pinecone(api_key=secrets.vector_db_api_key)
         self.index = self.pc.Index(name=self.index_name, host=self.index_host)
         self.stats = None
         print("successfully connected to PineCone!")
@@ -41,23 +40,20 @@ class PineConeClient():
         else:
             print("Cache is synced")
 
-    def _refresh_index_stats(self):
+    def _refresh_index_stats(self) -> None:
         try:
             self.stats = self.index.describe_index_stats()
             print("successfully refreshed index stats:")
             pprint.pprint(self.stats)
 
             self.ns_vectorcount = self.stats["namespaces"][self.namespace]["vector_count"]
-        except Exception as e:
-            print(f"There was an error refreshing index stats :/ we must exit. Error: {e}")
-            os._exit(231)
+        except Exception as err:
+            os._exit(f"Failed to refresh index stats, must exit: {err}")
 
-        return True
-
-    def query(self, inputvector: list[float], top_k=3):
+    def query(self, input_vector: list[float], top_k=3):
         results = self.index.query(
             namespace=self.namespace,
-            vector=inputvector,
+            vector=input_vector,
             top_k=top_k,
             include_values=False,
             include_metadata=True,
@@ -147,7 +143,6 @@ def process_pc_qr(pinecone_response, mss: float) -> str | None:
     Processes relevant vectors from Pinecone and extracts useful metadata fields
     to create a structured context string.
     """
-
     relevant_vectors = [match for match in pinecone_response.matches if match.score > mss]
 
     if not relevant_vectors:
@@ -181,3 +176,8 @@ def process_pc_qr(pinecone_response, mss: float) -> str | None:
         context_str_list.append(context_str)
 
     return "\n".join(context_str_list)
+
+
+def get_pinecone_client():
+    """Instantiate a Pinecone client object."""
+    return PineConeClient()

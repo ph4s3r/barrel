@@ -9,3 +9,8 @@ models/
 
 # Virtual environments
 .venv
+
+.env
+private.key
+
+tests/reports/

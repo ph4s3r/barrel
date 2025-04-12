@@ -1,0 +1,31 @@
+testName: Azure Networking Questions
+questions:
+  - question: Can virtual networks be peered across different entra tenants?
+    answer: >
+      Yes, virtual networks (VNets) across different Microsoft Entra tenants can be peered. 
+
+  - question: Can a virtual network span across multiple Azure regions?
+    answer: >
+      No, a single VNet is limited to one region.
+      You can connect VNets from different regions with peering.
+
+  - question: Is it possible to create multiple subnets within a single Azure VNet?
+    answer: >
+      Yes, you can define multiple subnets in one VNet.
+      Each subnet must have a unique address range.
+
+  - question: Does Azure reserve IP addresses in each subnet?
+    answer: >
+      Yes, it reserves five IP addresses per subnet.
+      The first, last, and three additional addresses are reserved.
+
+  - question: Can you peer two VNets with overlapping IP address ranges?
+    answer: >
+      No, overlapping address ranges are not supported for VNet peering.
+      The IP spaces must be distinct.
+
+  - question: Are user-defined routes (UDRs) mandatory in all Azure network setups?
+    answer: >
+      No, default system routes often suffice.
+      UDRs are only needed for custom routing scenarios.
+  

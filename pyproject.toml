@@ -1,17 +1,37 @@
 [project]
 name = "barrel"
 version = "0.1.0"
-description = "Add your description here"
+description = "RAG backend service"
 readme = "README.md"
 requires-python = "==3.12.9"
 
 dependencies = [
+    "cryptography>=44.0.2",
     "fastapi>=0.115.12",
     "gunicorn>=23.0.0",
     "langchain>=0.3.22",
     "langchain-openai>=0.3.12",
+    "multidict==6.4.3",
     "pinecone>=6.0.2",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.3",
     "uvicorn>=0.34.0",
     "voyageai>=0.3.2",
+]
+
+[dependency-groups]
+dev = [
+    "pylint>=3.3.6",
+    "pytest>=8.3.5",
+    "rich>=14.0.0",
+    "ruff>=0.11.5",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "./tests",
+    "-vvs"
+]
+markers = [
+    "local_test_only",
 ]
