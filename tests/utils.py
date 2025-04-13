@@ -8,9 +8,6 @@ from rich.panel import Panel
 from rich.table import Table
 
 
-results_dir = Path(__file__).parent / "reports"
-results_dir.mkdir(parents=True, exist_ok=True)
-
 TestCase = TypedDict(
     "TestCase",
     {
@@ -63,9 +60,9 @@ def display_table(test_suit: list[TestCase]):
     console.print(table)
 
 
-def calculate_and_display_test_score(test_suit: list[dict]) -> int:
+def calculate_and_display_test_score(test_suit: list[dict]) -> float:
     """Calculate the score of the LLM evaluation in percentage."""
-    final_score_percentage = 0
+    final_score_percentage = 0.0
 
     ratings = [tc["rating"] for tc in test_suit if tc["rating"] != -1]
     if ratings:
