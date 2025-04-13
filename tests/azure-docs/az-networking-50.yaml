@@ -1,0 +1,248 @@
+testName: Azure Networking Questions
+questions:
+  - question: Can virtual networks be peered across different entra tenants?
+    answer: >
+      Yes, virtual networks (VNets) across different Microsoft Entra tenants can be peered. 
+  - question: Can a virtual network span across multiple Azure regions?
+    answer: >
+      No, a single VNet is limited to one region.
+      You can connect VNets from different regions with peering.
+
+  - question: Is it possible to create multiple subnets within a single Azure VNet?
+    answer: >
+      Yes, you can define multiple subnets in one VNet.
+      Each subnet must have a unique address range.
+
+  - question: Does Azure reserve IP addresses in each subnet?
+    answer: >
+      Yes, it reserves five IP addresses per subnet.
+      The first, last, and three additional addresses are reserved.
+
+  - question: Can you peer two VNets with overlapping IP address ranges?
+    answer: >
+      No, overlapping address ranges are not supported for VNet peering.
+      The IP spaces must be distinct.
+
+  - question: Is broadcast traffic supported in Azure VNets?
+    answer: >
+      No, multicast or broadcast traffic is blocked.
+      Only unicast traffic is allowed in VNets.
+
+  - question: In a hub-and-spoke topology, can a spoke subnet directly peer with another spoke subnet by default?
+    answer: >
+      No, spokes cannot transit through the hub by default to reach each other unless you enable appropriate routing.
+      You can use a gateway, NVA, or direct peering.
+
+  - question: Does Azure automatically provide DNS resolution for VMs?
+    answer: >
+      Yes, Azure offers an internal DNS service by default.
+      You can also override it with custom DNS servers.
+
+  - question: Is a public IP mandatory for all VMs in a VNet?
+    answer: >
+      No, you can deploy VMs without public IP addresses.
+      They can still communicate internally and access the internet with NAT or outbound rules.
+
+  - question: Do virtual network gateways support connecting multiple on-premises sites?
+    answer: >
+      Yes, you can create site-to-site connections to multiple networks.
+      Configuration depends on the gateway SKU.
+
+  - question: When configuring a site-to-site VPN, is an on-premises VPN device always required?
+    answer: >
+      Yes, you need a compatible device or software to establish the IPsec tunnel.
+      Azure must connect to a VPN endpoint on-premises.
+
+  - question: Can you use VNet peering to connect VNets across different subscriptions?
+    answer: >
+      Yes, you can peer VNets in different subscriptions.
+      The subscriptions must be linked to the same or different tenants with appropriate permissions.
+
+  - question: Is it possible to change the address range of a VNet after creation?
+    answer: >
+      Yes, you can add or modify address ranges in a VNet if subnets are not in conflict.
+      Make sure no overlapping ranges exist.
+
+  - question: Do you need to delete a VM to move it to another subnet within the same VNet?
+    answer: >
+      No, you can move a VM between subnets without deleting it.
+      You just need to adjust its network interface settings.
+
+  - question: Is a network security group (NSG) stateful?
+    answer: >
+      Yes, NSGs are stateful.
+      Once traffic is allowed in one direction, return traffic is automatically allowed.
+
+  - question: Can you assign an NSG to both a subnet and a network interface at the same time?
+    answer: >
+      Yes, you can apply NSGs at the subnet level and at the NIC level.
+      The rules are effectively combined for the VM’s traffic.
+
+  - question: Does a default route in Azure automatically force all traffic back to on-premises?
+    answer: >
+      No, you must create a specific user-defined route or forced tunneling setup to send traffic on-premises.
+      By default, internet-bound traffic goes directly to the internet.
+
+  - question: Is a NAT gateway needed if your VM in a subnet already has a public IP?
+    answer: >
+      No, a NAT gateway is typically for outbound internet connectivity without assigning public IPs to each resource.
+      A VM with a public IP can already communicate externally.
+
+  - question: For hybrid name resolution, can you integrate on-premises DNS with Azure’s internal DNS?
+    answer: >
+      Yes, you can set up a hybrid DNS approach.
+      Typically, VMs use a custom DNS pointing to on-premises servers, or forwarder VMs in Azure.
+
+  - question: Does using a network virtual appliance (NVA) require user-defined routes?
+    answer: >
+      Yes, to force traffic through the NVA, you need to set custom routes.
+      This ensures traffic is inspected or routed by that device.
+
+  - question: Can you enable both ExpressRoute and VPN at the same time on the same VPN gateway?
+    answer: >
+      Yes, you can configure both on a single gateway.
+      This setup allows ExpressRoute with VPN failover scenarios.
+
+  - question: Does Azure Firewall require its own subnet?
+    answer: >
+      Yes, Azure Firewall must be in the AzureFirewallSubnet.
+      The subnet name is case-sensitive.
+
+  - question: Does traffic flow between subnets within the same VNet require a user-defined route by default?
+    answer: >
+      No, Azure routes traffic within a VNet automatically.
+      User-defined routes are only needed for custom routing.
+
+  - question: Can private endpoints replace the need for VNet service endpoints?
+    answer: >
+      Yes, Private Link can provide private access to services.
+      Service endpoints is another option but private endpoints offer more isolation.
+
+  - question: If you block all outbound internet access in an NSG, can resources still reach Azure services via service endpoints?
+    answer: >
+      Yes, service endpoints bypass typical internet paths.
+      They direct traffic through the Azure backbone to the service.
+
+  - question: Does a hub-and-spoke architecture often place shared services like DNS or firewalls in the hub?
+    answer: >
+      Yes, the hub VNet typically hosts shared resources.
+      Spoke VNets connect to the hub for those services.
+
+  - question: Is it possible to implement forced tunneling to inspect outbound traffic on-premises?
+    answer: >
+      Yes, you can force outbound traffic over your on-premises connection.
+      You set up a default route that points to the VPN gateway.
+
+  - question: Can you associate multiple NSGs with the same subnet?
+    answer: >
+      No, a subnet can only be associated with one NSG.
+      You can, however, also use an NSG at the NIC level.
+
+  - question: Does enabling a service endpoint require any downtime to the subnet?
+    answer: >
+      It might briefly disrupt existing connections.
+      New connections will use the service endpoint path.
+
+  - question: Is the default outbound rule for a new NSG set to deny all traffic to the internet?
+    answer: >
+      No, the default outbound rule allows internet access.
+      There is a built-in deny all rule with lower priority that is overridden by the allow rule.
+
+  - question: Do subnets in the same VNet require unique address ranges?
+    answer: >
+      Yes, they can’t overlap.
+      Each subnet must have a distinct CIDR.
+
+  - question: Is multicasting supported in Azure VNets?
+    answer: >
+      No, multicast routing isn’t supported.
+      You can’t send broadcast or multicast traffic.
+
+  - question: When using an NVA in a hub, does spoke-to-spoke traffic pass through the NVA if you configure UDRs?
+    answer: >
+      Yes, traffic can be forced through the NVA.
+      You just define appropriate routes for the spokes.
+
+  - question: Does having a custom DNS server in Azure require you to disable Azure-provided DNS?
+    answer: >
+      Yes, you override the default DNS settings with custom DNS.
+      Then your VMs will register and resolve through the custom DNS.
+
+  - question: Can you apply NSGs to protect Azure PaaS services that have private endpoints in your subnet?
+    answer: >
+      Yes, NSGs can filter traffic to private endpoints in the VNet.
+      They examine inbound and outbound traffic for the endpoint.
+
+  - question: Does the “DenyAllInbound” default rule stop existing allowed flows once they are established?
+    answer: >
+      No, NSGs are stateful.
+      Existing connections remain open until closed by either side.
+
+  - question: Is it necessary to use IP addresses for NSG rules when application security groups can be used?
+    answer: >
+      No, you can group resources with application security groups.
+      This approach simplifies your NSG rule management.
+
+  - question: For a hybrid DNS setup, can you forward DNS queries from Azure to on-premises DNS servers?
+    answer: >
+      Yes, you can deploy DNS forwarders or configure conditional forwarders.
+      This allows on-premises resolution in Azure.
+
+  - question: In a hub-spoke model, do all spokes typically share a single virtual network gateway in the hub for cross-premises connectivity?
+    answer: >
+      Yes, the hub usually hosts the main gateway.
+      Spokes rely on gateway transit through the hub.
+
+  - question: Does Azure automatically encrypt traffic between VNets that are peered?
+    answer: >
+      No, traffic is routed privately on the Azure backbone, but it isn’t automatically encrypted.
+      You can use encryption at higher layers if needed.
+
+  - question: Is there a maximum bandwidth limit for traffic through VNet peering?
+    answer: >
+      There’s no enforced limit at the peering level.
+      Bandwidth is only limited by the VM or compute resource size.
+
+  - question: Can you move a VNet with active peering to another region without removing the peering first?
+    answer: >
+      No, you must delete existing peerings or connections.
+      The move operation requires the VNet to have no peering.
+
+  - question: Do network virtual appliances typically handle advanced routing, like NAT or application layer inspection?
+    answer: >
+      Yes, NVAs are used for such functionality.
+      They can manage NAT, firewall rules, and more.
+
+  - question: Is it required to use ExpressRoute if you want a private connection from on-premises to Azure?
+    answer: >
+      No, you can also use a site-to-site VPN for a secure tunnel.
+      ExpressRoute is an option for dedicated, high-bandwidth links.
+
+  - question: When securing an Azure Storage account to a VNet using service endpoints, do you still need a public IP on the VM?
+    answer: >
+      No, traffic uses the VNet’s private IP addresses via the Azure backbone.
+      Public IPs aren’t required for that communication.
+
+  - question: Does each subnet in a hub-and-spoke topology typically require its own NSG?
+    answer: >
+      Not necessarily, but it’s often recommended for granular control.
+      You can also attach NSGs at the NIC level instead.
+
+  - question: In hybrid DNS, do you need at least two DNS servers for high availability?
+    answer: >
+      Yes, having at least two DNS servers is standard practice.
+      This ensures DNS resolution continues if one server fails.
+
+  - question: Does the Azure Bastion service require a dedicated subnet named AzureBastionSubnet?
+    answer: >
+      Yes, it needs that specific named subnet.
+      The subnet must meet the service’s size requirements.
+
+  - question: Are user-defined routes (UDRs) mandatory in all Azure network setups?
+    answer: >
+      No, default system routes often suffice.
+      UDRs are only needed for custom routing scenarios.
+
+  - question: Can I perform WAN optimization between virtual networks or between a virtual network and my on-premises datacenter?
+    answer: >
+      Yes. You can deploy a network virtual appliance for WAN optimization from several vendors through Azure Marketplace. 

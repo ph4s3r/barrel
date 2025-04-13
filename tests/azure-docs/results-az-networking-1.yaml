@@ -1,0 +1,382 @@
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" specifically mentions that a virtual network with both
+  an ExpressRoute gateway and a VPN gateway is not supported for VPN gateway migration
+  from classic to Resource Manager. This implies that having both simultaneously is
+  not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include:
+
+  >
+
+  > A virtual network with both an ExpressRoute gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported.'
+rating: 10
+eval_explanation: 'rating=[10]
+
+
+  The candidate''s answer is factually accurate, providing specific information from
+  the Azure Virtual Network FAQ that explains the scenario is not supported, aligning
+  with the reference answer.'
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" indicates that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This suggests that having both gateways simultaneously on the
+  same network is not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include: A virtual network with both an ExpressRoute
+  gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported, which implies that
+  enabling both on the same VPN gateway is not feasible.'
+rating: 9
+eval_explanation: 'rating=[9]
+
+
+  The candidate''s answer correctly states that it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway, aligning with the
+  context provided, but it slightly expands beyond the reference answer.'
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" indicates that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both simultaneously is not a supported
+  scenario.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include:
+
+  >
+
+  > A virtual network with both an ExpressRoute gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported.'
+rating: 10
+eval_explanation: 'rating=[10]
+
+
+  The candidate''s answer correctly states that both ExpressRoute and VPN cannot be
+  enabled on the same VPN gateway, aligning with the scenario described in the Azure
+  documentation.'
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" indicates that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This suggests that having both simultaneously on the same gateway
+  is not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include: A virtual network with both an ExpressRoute
+  gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context directly addresses the question and confirms that enabling both ExpressRoute
+  and VPN on the same VPN gateway is not supported.'
+rating: 10
+eval_explanation: rating=[10] The candidate correctly answered that enabling both
+  ExpressRoute and VPN simultaneously on the same VPN gateway is not supported, aligning
+  with the given information.
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, you cannot enable both ExpressRoute
+  and VPN at the same time on the same VPN gateway. The context from "Azure Virtual
+  Network FAQ" specifically mentions that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both simultaneously is not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include: A virtual network with both an ExpressRoute
+  gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context is the most relevant and directly addresses the question about enabling
+  both ExpressRoute and VPN on the same VPN gateway.'
+rating: 10
+eval_explanation: rating=[10] The candidate's answer correctly states that enabling
+  both ExpressRoute and VPN on the same VPN gateway is not supported, accurately citing
+  the Azure documentation, making it factually correct.
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, you cannot enable both ExpressRoute
+  and VPN at the same time on the same VPN gateway. The context from "Azure Virtual
+  Network FAQ" specifically mentions that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both simultaneously is not a supported
+  scenario.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include: A virtual network with both an ExpressRoute
+  gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context is the most relevant and directly addresses the question about enabling
+  both ExpressRoute and VPN on the same VPN gateway.'
+rating: 10
+eval_explanation: 'rating=[10]
+
+
+  The candidate''s answer is factually correct and aligns well with the known information
+  regarding the inability to enable both ExpressRoute and VPN simultaneously on the
+  same VPN gateway.'
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" indicates that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both simultaneously on the same gateway
+  is not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include:
+
+  >
+
+  > A virtual network with both an ExpressRoute gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported, which answers the
+  question regarding enabling both on the same VPN gateway.'
+rating: 10
+eval_explanation: rating=[10] The candidate's answer accurately states that it is
+  not possible to enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway, matching the context provided in the reference.
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, it is not possible to enable both
+  ExpressRoute and VPN at the same time on the same VPN gateway. The context from
+  "Azure Virtual Network FAQ" indicates that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both on the same gateway is not a
+  supported scenario.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include: A virtual network with both an ExpressRoute
+  gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported, which suggests that
+  enabling both on the same VPN gateway is not feasible.'
+rating: 10
+eval_explanation: 'rating=[10]
+
+
+  The candidate answer correctly states that enabling both ExpressRoute and VPN on
+  the same VPN gateway is not supported and provides relevant context and citation
+  to back that up, making it factually accurate.'
+
+
+filename: az-networking-1.yaml
+question: Can you enable both ExpressRoute and VPN at the same time on the same VPN
+  gateway?
+reference_answer: 'We don''t have information about this in our vector store
+
+  '
+candidate_answer: 'Based on the provided context, you cannot enable both ExpressRoute
+  and VPN at the same time on the same VPN gateway. The context from "Azure Virtual
+  Network FAQ" specifically mentions that a virtual network with both an ExpressRoute
+  gateway and a VPN gateway is not supported for VPN gateway migration from classic
+  to Resource Manager. This implies that having both simultaneously is not supported.
+
+
+  Here is the relevant excerpt from the context:
+
+
+  > "Scenarios that aren''t supported include:
+
+  >
+
+  > A virtual network with both an ExpressRoute gateway and a VPN gateway."
+
+
+  **Citations:**
+
+
+  - **Source:** [https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md](https://github.com/MicrosoftDocs/azure-docs/tree/main/articles/virtual-network/virtual-networks-faq.md)
+
+  - **Header:** Azure Virtual Network FAQ
+
+  - **Similarity Score:** 0.69938000
+
+
+  This context clearly indicates that the scenario of having both an ExpressRoute
+  and a VPN gateway on the same virtual network is not supported.'
+rating: 0
+eval_explanation: 'rating=0
+
+
+  The candidate''s answer provides specific information suggesting that both ExpressRoute
+  and VPN cannot be enabled on the same gateway, which contradicts the reference answer
+  stating that there is no information available about this.'
+
+
