@@ -60,7 +60,7 @@ def display_table(test_suit: list[TestCase]):
     console.print(table)
 
 
-def calculate_and_display_test_score(test_suit: list[dict]) -> float:
+def calculate_and_display_test_score(test_suit: list[TestCase]) -> float:
     """Calculate the score of the LLM evaluation in percentage."""
     final_score_percentage = 0.0
 
