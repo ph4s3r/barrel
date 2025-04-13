@@ -1,63 +1,74 @@
-import requests
+"""
+Load testing the 'embed' endpoint.
+
+Measure runtime accurately in multi-treaded program:
+https://superfastpython.com/benchmark-time-monotonic/
+"""
 import time
 import threading
 
-url = "http://127.0.0.1:3001/embed"
+import requests
+
+
+URL = "http://127.0.0.1:3001/embed"
 data = {"inputs": "What is Deep Learning?"}
 headers = {"Content-Type": "application/json"}
 
-# Function to perform a single request and record its result
+
 def make_request(thread_id, results):
-    req_start = time.time()
+    """Send 'embed' request and gather results."""
+    req_start = time.monotonic()
+
     try:
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(URL, json=data, headers=headers, timeout=(1, 6))
         status = response.status_code
         vector_dim = len(response.json()[0])
-    except Exception as e:
+    except Exception as err:
         status = "Error"
         vector_dim = None
-        print(f"Thread {thread_id}: Exception occurred - {e}")
-    req_end = time.time()
+        print(f"ERROR occurred on thread {thread_id}: {err}")
+
     results[thread_id] = {
         "status": status,
         "vector_dim": vector_dim,
-        "time": req_end - req_start
+        "time": time.monotonic() - req_start
     }
-    print(f"Thread {thread_id}: Status={status}, Vector dim={vector_dim}, Time={req_end - req_start:.4f}s")
+    print(
+        f"Thread {thread_id}: Status={status}, Vector dim="
+        f"{vector_dim}, Time={results[thread_id]['time']:.4f}s"
+    )
 
 # Single request timing
-start = time.time()
-response = requests.post(url, json=data, headers=headers)
-end = time.time()
+start = time.monotonic()
+response = requests.post(URL, json=data, headers=headers, timeout=(1, 6))
+end = time.monotonic()
 
 print("Response Status Code:", response.status_code)
 print("Response Vector dim:", len(response.json()[0]))
 print(f"Single request time: {end - start:.4f} seconds")
 
 # Parallel load testing using threading
-num_requests = 10
+NUM_REQUESTS = 10
 threads = []
 results = {}
 
 print("\nStarting parallel load test with threading...")
-load_start = time.time()
+load_start = time.monotonic()
 
-for i in range(num_requests):
-    thread = threading.Thread(target=make_request, args=(i+1, results))
+for i in range(NUM_REQUESTS):
+    thread = threading.Thread(target=make_request, args=(i + 1, results))
     threads.append(thread)
     thread.start()
     # To maintain the desired request rate
-    time.sleep(1.0 / 2)  # requests_per_second = 2
+    time.sleep(0.5)
 
 # Wait for all threads to complete
 for thread in threads:
     thread.join()
 
-load_end = time.time()
-
 # Calculate throughput
-total_load_time = load_end - load_start
-throughput = num_requests / total_load_time
+total_run_time = time.monotonic() - load_start
+throughput = NUM_REQUESTS / total_run_time
 
-print(f"\nTotal time for {num_requests} parallel requests: {total_load_time:.4f}s")
+print(f"\nTotal time for {NUM_REQUESTS} parallel requests: {total_run_time:.4f}s")
 print(f"Throughput: {throughput:.2f} requests/second")

@@ -1,6 +1,6 @@
 from scipy.spatial import distance
 
-text = """Select Next: Disks then Next: Networking.
+TEXT = """Select Next: Disks then Next: Networking.
 
 In the Networking tab, enter or select the following information:"""
 

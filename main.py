@@ -1,5 +1,6 @@
 """Fast API RAG backend server."""
 from fastapi import FastAPI, Response, Depends, status
+from voyageai.client import Client
 
 from request_models import PromptArgs
 from embedding_client_voyage import get_embedder_client
@@ -14,7 +15,7 @@ app = FastAPI(title="Barrel", docs_url="/")
 async def user_prompt(
     prompt: str,
     args: PromptArgs,
-    client = Depends(get_embedder_client),
+    client: Client = Depends(get_embedder_client),
     pc_client: PineConeClient = Depends(get_pinecone_client)
 ):
     """Endpoint for processing user prompts."""
