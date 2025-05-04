@@ -1,5 +1,6 @@
 """Fast API RAG backend server."""
 from fastapi import FastAPI, Response, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
 from voyageai.client import Client
 
 from request_models import PromptArgs
@@ -9,6 +10,14 @@ from llm_client import SuperPrompt
 
 
 app = FastAPI(title="Barrel", docs_url="/")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],       # or ["http://localhost:3000"] etc.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/user_prompt", response_model=str)
