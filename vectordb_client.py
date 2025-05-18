@@ -20,7 +20,7 @@ class PineConeClient:
         # this value should be coming from the local cache
         self.cached_vectors_count = None
         self.local_cache = "cache/vectors.dict"
-        self.cache_refreshed_already = True
+        self.cache_refreshed_already = False
 
         # this data should be coming from the api
         self.ns_vectorcount = None
@@ -81,10 +81,36 @@ class PineConeClient:
 
         for ids in self.index.list(limit=self.max_batch_size, namespace=self.namespace):
             fetch_response = self.index.fetch(ids=ids, namespace=self.namespace)
-            ru += int(fetch_response.get("usage", {}).get("read_units", 0))
-
-            for items in fetch_response["vectors"].items():
-                self.cached_vectors[items[0]] = {"metadata": items[1]["metadata"]}
+            
+            # Handle FetchResponse object properly
+            try:
+                # Try to access usage attribute if available
+                if hasattr(fetch_response, 'usage') and hasattr(fetch_response.usage, 'read_units'):
+                    ru += int(fetch_response.usage.read_units)
+                else:
+                    # Fallback for older API versions that might return a dict
+                    ru += int(fetch_response.get("usage", {}).get("read_units", 0))
+            except AttributeError:
+                # If neither approach works, just continue without counting read units
+                print("Warning: Could not extract read units from fetch response")
+            
+            # Update to handle FetchResponse object properly
+            if hasattr(fetch_response, 'vectors'):
+                vectors = fetch_response.vectors
+                # Vectors might be a dict directly or an attribute with items() method
+                if hasattr(vectors, 'items'):
+                    items_to_process = vectors.items()
+                else:
+                    items_to_process = vectors.items()
+            else:
+                # Fallback for older API versions
+                items_to_process = fetch_response["vectors"].items()
+                
+            for vector_id, vector_data in items_to_process:
+                if hasattr(vector_data, 'metadata'):
+                    self.cached_vectors[vector_id] = {"metadata": vector_data.metadata}
+                else:
+                    self.cached_vectors[vector_id] = {"metadata": vector_data["metadata"]}
 
         print(f"{ru} read units used for this operation")
 

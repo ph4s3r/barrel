@@ -54,3 +54,19 @@ async def user_prompt(
     ### LLM client end
 
     return outputs[0]
+
+@app.get("/indexes")
+async def get_indexes(pc_client: PineConeClient = Depends(get_pinecone_client)):
+    """Endpoint for retrieving sources from the cached vector data."""
+    sources = pc_client.return_sources()
+    
+    if sources is None:
+        return Response(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content="No cached vectors found"
+        )
+    
+    # Transform sources into a more JSON-friendly format
+    sources_dict = {source: count for source, count in sources}
+    
+    return {"sources": sources_dict}
