@@ -14,7 +14,7 @@ class PineConeClient:
         self.max_batch_size = 100
         self.index_name = "voyage1024"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
-        self.namespace = "vnets1024"
+        self.namespace = "ms-docs"
         self.cached_vectors = {}
 
         # this value should be coming from the local cache
