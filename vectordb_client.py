@@ -14,7 +14,7 @@ class PineConeClient:
         self.max_batch_size = 100
         self.index_name = "voyage1024"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
-        self.namespace = "ms-docs"
+        self.namespaces = ["ms-docs"]
         self.cached_vectors = {}
 
         # this value should be coming from the local cache
@@ -46,13 +46,14 @@ class PineConeClient:
             print("successfully refreshed index stats:")
             pprint.pprint(self.stats)
 
-            self.ns_vectorcount = self.stats["namespaces"][self.namespace]["vector_count"]
+            self.ns_vectorcount = self.stats.total_vector_count
         except Exception as err:
             os._exit(f"Failed to refresh index stats, must exit: {err}")
 
-    def query(self, input_vector: list[float], top_k=3):
-        results = self.index.query(
-            namespace=self.namespace,
+    def query(self, input_vector: list[float], top_k=10):
+        results = self.index.query_namespaces(
+            namespaces=self.namespaces,
+            metric="cosine",
             vector=input_vector,
             top_k=top_k,
             include_values=False,
@@ -79,8 +80,8 @@ class PineConeClient:
     def refresh_cache(self):
         ru = 0
 
-        for ids in self.index.list(limit=self.max_batch_size, namespace=self.namespace):
-            fetch_response = self.index.fetch(ids=ids, namespace=self.namespace)
+        for ids in self.index.list(limit=self.max_batch_size):
+            fetch_response = self.index.fetch(ids=ids)
             
             # Handle FetchResponse object properly
             try:

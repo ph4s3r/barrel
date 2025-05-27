@@ -37,7 +37,7 @@ async def user_prompt(
     ### pinecone client START
     pinecone_response = pc_client.query(input_vector=return_vector, top_k=args.top_k)
     context_text = process_pc_qr(pinecone_response, mss=args.mss)
-    vector_ids = [item.id for item in pinecone_response._data_store["matches"]]
+    vector_ids = [item.id for item in pinecone_response.matches]
     print("vector ids:", vector_ids)
 
     if context_text is None:
