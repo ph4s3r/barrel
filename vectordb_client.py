@@ -3,6 +3,7 @@ import sys
 import pickle
 import pprint
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from pinecone import Pinecone
 
@@ -46,8 +47,10 @@ class PineConeClient:
             self.stats = self.index.describe_index_stats()
             print("successfully refreshed index stats:")
             pprint.pprint(self.stats)
+            self.ns_vectorcount = 0
+            for ns in self.stats.namespaces:
+                self.ns_vectorcount = self.ns_vectorcount + int(self.stats.namespaces[ns].vector_count)
 
-            self.ns_vectorcount = self.stats.total_vector_count
         except Exception as err:
             sys.exit(f"Failed to refresh index stats, must exit: {err}")
 
@@ -79,67 +82,65 @@ class PineConeClient:
         return sorted(source_list.items())
 
     def refresh_cache(self):
+        """Refresh the local cache of vectors.
+
+        This version fetches vector metadata in parallel to drastically
+        reduce wall-clock time for large namespaces. It batches IDs
+        (up to self.max_batch_size) and uses a thread pool to issue
+        concurrent fetch requests. The number of worker threads is
+        capped to avoid overwhelming the Pinecone API.
+        """
+        BATCH = min(self.max_batch_size, 1000)  # Pinecone max limit per request is 1000
+        MAX_WORKERS = min(32, os.cpu_count() * 5)
+
         ru = 0
-        self.cached_vectors = {}  # Reset the cache
+        self.cached_vectors = {}
 
-        # Iterate through all namespaces
-        for namespace in self.namespaces:
-            print(f"Refreshing cache for namespace: {namespace}")
-            
-            for ids in self.index.list(namespace=namespace, limit=self.max_batch_size):
-                fetch_response = self.index.fetch(ids=ids, namespace=namespace)
-                
-                # Handle FetchResponse object properly
-                try:
-                    # Try to access usage attribute if available
-                    if hasattr(fetch_response, 'usage') and hasattr(fetch_response.usage, 'read_units'):
-                        ru += int(fetch_response.usage.read_units)
-                    else:
-                        # Fallback for older API versions that might return a dict
-                        ru += int(fetch_response.get("usage", {}).get("read_units", 0))
-                except AttributeError:
-                    # If neither approach works, just continue without counting read units
-                    print("Warning: Could not extract read units from fetch response")
-                
-                # Update to handle FetchResponse object properly
-                if hasattr(fetch_response, 'vectors'):
-                    vectors = fetch_response.vectors
-                    # Vectors might be a dict directly or an attribute with items() method
-                    if hasattr(vectors, 'items'):
-                        items_to_process = vectors.items()
-                    else:
-                        items_to_process = vectors.items()
+        # Helper to process a single FetchResponse and merge into cache
+        def _process_fetch(resp, ns):
+            nonlocal ru
+            # Read units accounting
+            try:
+                if hasattr(resp, "usage") and hasattr(resp.usage, "read_units"):
+                    ru += int(resp.usage.read_units)
                 else:
-                    # Fallback for older API versions
-                    items_to_process = fetch_response["vectors"].items()
-                    
-                for vector_id, vector_data in items_to_process:
-                    if hasattr(vector_data, 'metadata'):
-                        self.cached_vectors[vector_id] = {
-                            "metadata": vector_data.metadata,
-                            "namespace": namespace
-                        }
-                    else:
-                        self.cached_vectors[vector_id] = {
-                            "metadata": vector_data["metadata"],
-                            "namespace": namespace
-                        }
+                    ru += int(getattr(resp, "usage", {}).get("read_units", 0))
+            except Exception:
+                pass
 
-        print(f"{ru} read units used for this operation")
+            vectors_attr = resp.vectors if hasattr(resp, "vectors") else resp["vectors"]
+            for vid, vdata in vectors_attr.items():
+                metadata = vdata.metadata if hasattr(vdata, "metadata") else vdata["metadata"]
+                self.cached_vectors[vid] = {"metadata": metadata, "namespace": ns}
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+            futures = []
+            for namespace in self.namespaces:
+                print(f"Listing vector IDs for namespace '{namespace}' …")
+                for ids_chunk in self.index.list(namespace=namespace, limit=BATCH):
+                    futures.append(pool.submit(self.index.fetch, ids=ids_chunk, namespace=namespace))
+
+            # Gather results
+            for fut in as_completed(futures):
+                try:
+                    resp = fut.result()
+                    ns = resp.namespace if hasattr(resp, "namespace") else None
+                    _process_fetch(resp, ns)
+                except Exception as exc:
+                    print(f"Fetch task failed: {exc}")
 
         self.read_units_used += ru
+        print(f"Total read units used: {ru}")
 
-        print("Trying to serialize the vectors to cache.")
-        directory = os.path.dirname(self.local_cache)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
+        # Persist cache
+        print("Serializing vectors to cache file …")
+        os.makedirs(os.path.dirname(self.local_cache), exist_ok=True)
         with open(self.local_cache, "wb") as file:
             pickle.dump(self.cached_vectors, file)
 
-        print("Successfully pickled the vectors.")
         self.cached_vectors_count = len(self.cached_vectors)
         self.cache_refreshed_already = True
+        print(f"Cache written with {self.cached_vectors_count} vectors.")
 
     def _cache_synced(self):
         """
