@@ -49,7 +49,8 @@ class PineConeClient:
             pprint.pprint(self.stats)
             self.ns_vectorcount = 0
             for ns in self.stats.namespaces:
-                self.ns_vectorcount = self.ns_vectorcount + int(self.stats.namespaces[ns].vector_count)
+                if ns in self.namespaces:
+                    self.ns_vectorcount = self.ns_vectorcount + int(self.stats.namespaces[ns].vector_count)
 
         except Exception as err:
             sys.exit(f"Failed to refresh index stats, must exit: {err}")
