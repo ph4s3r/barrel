@@ -1,4 +1,5 @@
 import os
+import sys
 import pickle
 import pprint
 from collections import Counter
@@ -48,7 +49,7 @@ class PineConeClient:
 
             self.ns_vectorcount = self.stats.total_vector_count
         except Exception as err:
-            os._exit(f"Failed to refresh index stats, must exit: {err}")
+            sys.exit(f"Failed to refresh index stats, must exit: {err}")
 
     def query(self, input_vector: list[float], top_k=10):
         results = self.index.query_namespaces(
