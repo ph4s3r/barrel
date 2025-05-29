@@ -28,6 +28,10 @@ Please answer the question exclusively based on the documentation articles retri
 
 The relevance of the articles are expressed in a numerical value in matches[].score, the higher the value the more relevant the article to our question. Please consider all the metadata when trying to answer the user's question.
 
+Make sure you don't use your own knowledge or anything to answer the question, ONLY the information in the documentation articles.
+
+Make double check that you include all the json data in the response.
+
 Then cite the relevant article(s) just saying "relevant article(s):" in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
 
 [
