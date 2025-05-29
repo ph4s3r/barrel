@@ -21,21 +21,51 @@ class SuperPrompt:
     def process_prompt(self, prompt: str, context_text: str) -> list[str]:
         """Process user question."""
         if context_text is not None:
-            super_prompt = """
-answer the question based only on the following context from a vector store: the bigger the similarity score the more relevant the content is.
+            super_prompt = """ 
+Here is a question: {question}
+
+Please answer the question exclusively based on the documentation articles retrieved from our vector database, below encapsulated in the optional json block in the content key with a lot of metadata. If there is no relevant information in the documentation articles, please state to the user that "we don't have relevant enough information in our vector store to answer this question"
+
+The relevance of the articles are expressed in a numerical value in matches[].score, the higher the value the more relevant the article to our question. Please consider all the metadata when trying to answer the user's question.
+
+Then cite the relevant article(s) just saying "relevant article(s):" in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
+
+[
+    {{
+    "citation": {{
+        "www": "",
+        "source_url": "",
+        "web_url": "",
+        "content": "", 		
+        "source_format": "",
+        "main_category": "",
+        "sub_category": "",
+        "markdown.data": {{ 	
+        "main_header": "",
+        "header_0": "",
+        "header_1": "",
+        "header_2": "",
+        "header_3": "",
+        }}
+        "ms.headers": {{
+        "title": "",
+        "titleSuffix": "",
+        "description": "",
+        "ms.custom": "",
+        "ms.date": "",
+        "ms.service": "",
+        "ms.topic": "",
+        "intent": "",
+        }},
+    }}
+    }}
+]
+
+Here are the documentation articles as a context to answer the question from:
+
 {context_text}
-answer the question based on the above context: {question}.
-provide a detailed answer.
-don't give information not mentioned in the context information.
-Please cite the relevant document files in your answer from the context with full reference: metadata source
-(the full path of the source is really important: it indicates the document location in the documentation structure / category),
-metadata header (which was the title/header of the text block in the original markdown documentation) and similarity score with
-8 decimal point precision (no flooring) e.g. 0.84780987 and also quote an excerpt of the original context as-is. Please format your answer
-as a markdown where citations are clearly distinguished. If the context with the highest similarity score is not relevant, please double
-check and explain why it is not relevant. So please try to make sure that the most similar contexts are verified. However, if the contexts
-are not containing anything relevant, then do not explain what are the most relevant sources, just provide your answer, obviously
-don't need to mention anything about citations. If you are sure there are no relevant context, please use your own knowledge.
-            """
+"""
+
             super_prompt = ChatPromptTemplate.from_template(super_prompt)
             prompt = super_prompt.format(context_text=context_text, question=prompt)
             llm_output = self.model.invoke(prompt).content

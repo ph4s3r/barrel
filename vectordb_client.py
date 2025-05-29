@@ -14,7 +14,7 @@ class PineConeClient:
 
     def __init__(self) -> None:
         self.max_batch_size = 100
-        self.index_name = "voyage1024"
+        self.index_name = "voyage1042dev"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
         self.namespaces = ["ms-docs"]
         self.cached_vectors = {}
@@ -34,13 +34,14 @@ class PineConeClient:
 
         self.read_units_used = 0
 
-        if not self._cache_synced():
-            if not self.cache_refreshed_already:
-                self.refresh_cache()
-            else:
-                print("Something went wrong with the cache refresh, please reach out to your admin to refresh manually.")
-        else:
-            print("Cache is synced")
+        # cache refresh is disabled for now (29 may 2025)
+        # if not self._cache_synced():
+        #     if not self.cache_refreshed_already:
+        #         self.refresh_cache()
+        #     else:
+        #         print("Something went wrong with the cache refresh, please reach out to your admin to refresh manually.")
+        # else:
+        #     print("Cache is synced")
 
     def _refresh_index_stats(self) -> None:
         try:
@@ -82,101 +83,101 @@ class PineConeClient:
         source_list = Counter(vector_data.get("metadata", {}).get("source", "Unknown Source") for _, vector_data in self.cached_vectors.items())
         return sorted(source_list.items())
 
-    def refresh_cache(self):
-        """Refresh the local cache of vectors.
+    # def refresh_cache(self):
+    #     """Refresh the local cache of vectors.
 
-        This version fetches vector metadata in parallel to drastically
-        reduce wall-clock time for large namespaces. It batches IDs
-        (up to self.max_batch_size) and uses a thread pool to issue
-        concurrent fetch requests. The number of worker threads is
-        capped to avoid overwhelming the Pinecone API.
-        """
-        BATCH = min(self.max_batch_size, 1000)  # Pinecone max limit per request is 1000
-        MAX_WORKERS = min(32, os.cpu_count() * 5)
+    #     This version fetches vector metadata in parallel to drastically
+    #     reduce wall-clock time for large namespaces. It batches IDs
+    #     (up to self.max_batch_size) and uses a thread pool to issue
+    #     concurrent fetch requests. The number of worker threads is
+    #     capped to avoid overwhelming the Pinecone API.
+    #     """
+    #     BATCH = min(self.max_batch_size, 1000)  # Pinecone max limit per request is 1000
+    #     MAX_WORKERS = min(32, os.cpu_count() * 5)
 
-        ru = 0
-        self.cached_vectors = {}
+    #     ru = 0
+    #     self.cached_vectors = {}
 
-        # Helper to process a single FetchResponse and merge into cache
-        def _process_fetch(resp, ns):
-            nonlocal ru
-            # Read units accounting
-            try:
-                if hasattr(resp, "usage") and hasattr(resp.usage, "read_units"):
-                    ru += int(resp.usage.read_units)
-                else:
-                    ru += int(getattr(resp, "usage", {}).get("read_units", 0))
-            except Exception:
-                pass
+    #     # Helper to process a single FetchResponse and merge into cache
+    #     def _process_fetch(resp, ns):
+    #         nonlocal ru
+    #         # Read units accounting
+    #         try:
+    #             if hasattr(resp, "usage") and hasattr(resp.usage, "read_units"):
+    #                 ru += int(resp.usage.read_units)
+    #             else:
+    #                 ru += int(getattr(resp, "usage", {}).get("read_units", 0))
+    #         except Exception:
+    #             pass
 
-            vectors_attr = resp.vectors if hasattr(resp, "vectors") else resp["vectors"]
-            for vid, vdata in vectors_attr.items():
-                metadata = vdata.metadata if hasattr(vdata, "metadata") else vdata["metadata"]
-                self.cached_vectors[vid] = {"metadata": metadata, "namespace": ns}
+    #         vectors_attr = resp.vectors if hasattr(resp, "vectors") else resp["vectors"]
+    #         for vid, vdata in vectors_attr.items():
+    #             metadata = vdata.metadata if hasattr(vdata, "metadata") else vdata["metadata"]
+    #             self.cached_vectors[vid] = {"metadata": metadata, "namespace": ns}
 
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-            futures = []
-            for namespace in self.namespaces:
-                print(f"Listing vector IDs for namespace '{namespace}' …")
-                for ids_chunk in self.index.list(namespace=namespace, limit=BATCH):
-                    futures.append(pool.submit(self.index.fetch, ids=ids_chunk, namespace=namespace))
+    #     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+    #         futures = []
+    #         for namespace in self.namespaces:
+    #             print(f"Listing vector IDs for namespace '{namespace}' …")
+    #             for ids_chunk in self.index.list(namespace=namespace, limit=BATCH):
+    #                 futures.append(pool.submit(self.index.fetch, ids=ids_chunk, namespace=namespace))
 
-            # Gather results
-            for fut in as_completed(futures):
-                try:
-                    resp = fut.result()
-                    ns = resp.namespace if hasattr(resp, "namespace") else None
-                    _process_fetch(resp, ns)
-                except Exception as exc:
-                    print(f"Fetch task failed: {exc}")
+    #         # Gather results
+    #         for fut in as_completed(futures):
+    #             try:
+    #                 resp = fut.result()
+    #                 ns = resp.namespace if hasattr(resp, "namespace") else None
+    #                 _process_fetch(resp, ns)
+    #             except Exception as exc:
+    #                 print(f"Fetch task failed: {exc}")
 
-        self.read_units_used += ru
-        print(f"Total read units used: {ru}")
+    #     self.read_units_used += ru
+    #     print(f"Total read units used: {ru}")
 
-        # Persist cache
-        print("Serializing vectors to cache file …")
-        os.makedirs(os.path.dirname(self.local_cache), exist_ok=True)
-        with open(self.local_cache, "wb") as file:
-            pickle.dump(self.cached_vectors, file)
+    #     # Persist cache
+    #     print("Serializing vectors to cache file …")
+    #     os.makedirs(os.path.dirname(self.local_cache), exist_ok=True)
+    #     with open(self.local_cache, "wb") as file:
+    #         pickle.dump(self.cached_vectors, file)
 
-        self.cached_vectors_count = len(self.cached_vectors)
-        self.cache_refreshed_already = True
-        print(f"Cache written with {self.cached_vectors_count} vectors.")
+    #     self.cached_vectors_count = len(self.cached_vectors)
+    #     self.cache_refreshed_already = True
+    #     print(f"Cache written with {self.cached_vectors_count} vectors.")
 
-    def _cache_synced(self):
-        """
-        The function checks if we have a local replica, and loads the self.all_vectors with it, otherwise does not do anything
-        """
-        print("checking cache...")
+    # def _cache_synced(self):
+    #     """
+    #     The function checks if we have a local replica, and loads the self.all_vectors with it, otherwise does not do anything
+    #     """
+    #     print("checking cache...")
 
-        cache_fully_synced = False
+    #     cache_fully_synced = False
 
-        if os.path.exists(self.local_cache):
-            try:
-                with open(self.local_cache, "rb") as file:
-                    self.cached_vectors = pickle.load(file)
-                    self.cached_vectors_count = len(self.cached_vectors)
-                    if len(self.cached_vectors) == 0:
-                        print("vector file read successfully, but there are no vectors in it :(")
-                        cache_fully_synced = False
-                    elif self.cached_vectors_count != self.ns_vectorcount:
-                        print("we have a different amount of vectors in the cache than actually in the namespace..")
-                        print(f"ns: {self.ns_vectorcount} vs cache: {self.cached_vectors_count}")
-                        cache_fully_synced = False
-                    else:
-                        self.cached_vectors_count = len(self.cached_vectors)
-                        print(f"vector dict file read successfully, we have all the {self.cached_vectors_count} vectors in the cache as well.")
-                        cache_fully_synced = True
-            except KeyError as ke:
-                print(f"The cache file is unreadable, continuing. Error: {ke}")
-                cache_fully_synced = False
-            except Exception as e:
-                print(f"An error occurred during reading the vector file: {e}")
-                cache_fully_synced = False
-        else:  # os.path. not exists(self.local_cache)
-            cache_fully_synced = False
+    #     if os.path.exists(self.local_cache):
+    #         try:
+    #             with open(self.local_cache, "rb") as file:
+    #                 self.cached_vectors = pickle.load(file)
+    #                 self.cached_vectors_count = len(self.cached_vectors)
+    #                 if len(self.cached_vectors) == 0:
+    #                     print("vector file read successfully, but there are no vectors in it :(")
+    #                     cache_fully_synced = False
+    #                 elif self.cached_vectors_count != self.ns_vectorcount:
+    #                     print("we have a different amount of vectors in the cache than actually in the namespace..")
+    #                     print(f"ns: {self.ns_vectorcount} vs cache: {self.cached_vectors_count}")
+    #                     cache_fully_synced = False
+    #                 else:
+    #                     self.cached_vectors_count = len(self.cached_vectors)
+    #                     print(f"vector dict file read successfully, we have all the {self.cached_vectors_count} vectors in the cache as well.")
+    #                     cache_fully_synced = True
+    #         except KeyError as ke:
+    #             print(f"The cache file is unreadable, continuing. Error: {ke}")
+    #             cache_fully_synced = False
+    #         except Exception as e:
+    #             print(f"An error occurred during reading the vector file: {e}")
+    #             cache_fully_synced = False
+    #     else:  # os.path. not exists(self.local_cache)
+    #         cache_fully_synced = False
 
-        return cache_fully_synced
+    #     return cache_fully_synced
 
 
 def process_pc_qr(pinecone_response, mss: float) -> str | None:
