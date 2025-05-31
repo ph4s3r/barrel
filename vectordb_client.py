@@ -16,7 +16,7 @@ class PineConeClient:
         self.max_batch_size = 100
         self.index_name = "voyage1042dev"
         self.index_host = f"https://{self.index_name}-226a147.svc.aped-4627-b74a.pinecone.io"
-        self.namespaces = ["ms-docs"]
+        self.namespaces = [] # all nsses will be added automatically
         self.cached_vectors = {}
 
         # this value should be coming from the local cache
@@ -50,8 +50,11 @@ class PineConeClient:
             pprint.pprint(self.stats)
             self.ns_vectorcount = 0
             for ns in self.stats.namespaces:
-                if ns in self.namespaces:
-                    self.ns_vectorcount = self.ns_vectorcount + int(self.stats.namespaces[ns].vector_count)
+                if ns not in self.namespaces:
+                    print(f"namespace {ns} was not in the namespaces list, adding it...")
+                    self.namespaces.append(ns)
+                self.ns_vectorcount = self.ns_vectorcount + int(self.stats.namespaces[ns].vector_count)
+
 
         except Exception as err:
             sys.exit(f"Failed to refresh index stats, must exit: {err}")
