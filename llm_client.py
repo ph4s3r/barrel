@@ -32,7 +32,7 @@ Make sure you don't use your own knowledge or anything to answer the question, O
 
 Make double check that you include all the json data in the response.
 
-Then cite the relevant article(s) just saying "relevant article(s):" in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
+If there are articles to cite, then cite the relevant article(s) just saying "relevant article(s):" in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
 
 [
     {{
@@ -75,14 +75,3 @@ Here are the documentation articles as a context to answer the question from:
             llm_output = self.model.invoke(prompt).content
 
             return [llm_output]
-
-        fallback_prompt = """
-Please state that
-'We don't have information about this in our vector store'
-verbatim. Do not add any other information to the response.
-"""
-        super_prompt = ChatPromptTemplate.from_template(fallback_prompt)
-        prompt = super_prompt.format(question=prompt)
-        llm_output = self.model.invoke(prompt).content
-
-        return [llm_output]
