@@ -1,4 +1,5 @@
 """LLM module of handling user requests."""
+import json
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 
@@ -10,7 +11,7 @@ class SuperPrompt:
     def __init__(self) -> None:
         """Instantiate OpenAI LLM client."""
         self.model = ChatOpenAI(
-            model="gpt-4o",
+            model="gpt-4.1",
             temperature=0.0,
             max_tokens=None,
             timeout=None,
@@ -24,7 +25,7 @@ class SuperPrompt:
             super_prompt = """ 
 Here is a question: {question}
 
-Please answer the question exclusively based on the documentation articles retrieved from our vector database, below encapsulated in the optional json block in the content key with a lot of metadata. If there is no relevant information in the documentation articles, please state to the user that "we don't have relevant enough information in our vector store to answer this question"
+Please answer the question exclusively based on the documentation articles retrieved from our vector database, below encapsulated in the optional json block in the content key with a lot of metadata. If there is no relevant information in the documentation articles, please state to the user that "we don't have relevant enough information in our vector store to answer this specific question"
 
 The relevance of the articles are expressed in a numerical value in matches[].score, the higher the value the more relevant the article to our question. Please consider all the metadata when trying to answer the user's question.
 
@@ -32,7 +33,7 @@ Make sure you don't use your own knowledge or anything to answer the question, O
 
 Make double check that you include all the json data in the response.
 
-If there are articles to cite, then cite the relevant article(s) just saying "relevant article(s):" in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
+If there are articles to cite, then cite the relevant article(s) just saying "most relevant article(s):" verbatim in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
 
 [
     {{
