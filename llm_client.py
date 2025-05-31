@@ -35,6 +35,7 @@ Make double check that you include all the json data in the response.
 
 If there are articles to cite, then cite the relevant article(s) just saying "most relevant article(s):" verbatim in the following json format in a list (omit the keys where there was no value in the original retrieved documentation article json):
 Please omit the empty json keys where there is no value
+Please format your answer itself in markdown format (not the citation part)
 [
     {{
     "citation": {{
