@@ -11,7 +11,7 @@ class SuperPrompt:
     def __init__(self) -> None:
         """Instantiate OpenAI LLM client."""
         self.model = ChatOpenAI(
-            model="gpt-4.1",
+            model="gpt-4o",
             temperature=0.0,
             max_tokens=None,
             timeout=None,

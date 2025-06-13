@@ -6,7 +6,7 @@ from voyageai.client import Client
 from request_models import PromptArgs
 from embedding_client_voyage import get_embedder_client
 from vectordb_client import PineConeClient, get_pinecone_client, process_pc_qr
-from llm_client import SuperPrompt
+from llm_client_azure import SuperPrompt
 
 
 app = FastAPI(title="Barrel", docs_url="/")
@@ -53,7 +53,7 @@ async def user_prompt(
     outputs = sp.process_prompt(prompt, context_text)
     ### LLM client end
 
-    return outputs[0]
+    return outputs
 
 @app.get("/indexes")
 async def get_indexes(pc_client: PineConeClient = Depends(get_pinecone_client)):
