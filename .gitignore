@@ -12,6 +12,6 @@ models/
 
 .env
 private.key
-public.key
+credentials/public.key
 
 tests/reports/
