@@ -261,7 +261,7 @@ questions:
     answer: >
       No, you can also use a site-to-site VPN for a secure tunnel.
       ExpressRoute is an option for dedicated, high-bandwidth links.
-    verified: false
+    verified: true
 
   - question: When securing an Azure Storage account to a VNet using service endpoints, do you still need a public IP on the VM?
     answer: >
@@ -271,7 +271,7 @@ questions:
 
   - question: Does each subnet in a hub-and-spoke topology typically require its own NSG?
     answer: >
-      Not necessarily, but it’s often recommended for granular control.
+      Not necessarily, but it's often recommended for granular control.
       You can also attach NSGs at the NIC level instead.
     verified: false
 
@@ -279,21 +279,42 @@ questions:
     answer: >
       Yes, having at least two DNS servers is standard practice.
       This ensures DNS resolution continues if one server fails.
-    verified: false
+    verified: true
 
   - question: Does the Azure Bastion service require a dedicated subnet named AzureBastionSubnet?
     answer: >
       Yes, it needs that specific named subnet.
-      The subnet must meet the service’s size requirements.
-    verified: false
+      The subnet must meet the service's size requirements.
+    verified: true
 
   - question: Are user-defined routes (UDRs) mandatory in all Azure network setups?
     answer: >
-      No, default system routes often suffice.
+      If no user-defined routes (UDRs) are defined, Azure uses default routes to allow traffic to flow from one subnet to another. 
       UDRs are only needed for custom routing scenarios.
-    verified: false
+    verified: true
 
-  - question: Can I perform WAN optimization between virtual networks or between a virtual network and my on-premises datacenter?
+  - question: >
+      You are planning an Azure Point-to-Site (P2S) VPN that will use OpenVPN. 
+      Users will authenticate by an on-premises Active Directory domain. 
+      Which additional service should you deploy to support the VPN authentication?  
+      A. an Azure key vault 
+      B. a RADIUS server 
+      C. a certification authority 
+      D. Azure Active Directory (Azure AD) Application Proxy
     answer: >
-      Yes. You can deploy a network virtual appliance for WAN optimization from several vendors through Azure Marketplace.
-    verified: false
+      B. a RADIUS server
+    verified: true
+
+    - question: >
+        You plan to configure BGP for a Site-to-Site VPN connection between a datacenter and Azure.
+        Which two Azure resources should you configure? Each correct answer presents a part of the solution. (Choose two.)
+        NOTE: Each correct selection is worth one point.
+
+        A. a virtual network gateway
+        B. Azure Application Gateway
+        C. Azure Firewall
+        D. a local network gateway
+        E. Azure Front Door
+      answer: >
+        A. a virtual network gateway and D. a local network gateway
+      verified: true
