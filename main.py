@@ -5,7 +5,7 @@ from voyageai.client import Client
 
 from request_models import PromptArgs
 from embedding_client_voyage import get_embedder_client
-from vectordb_client import PineConeClient, get_pinecone_client, process_pc_qr
+from vectordb_client import PineConeClient, get_pinecone_client
 from llm_client_azure import SuperPrompt
 
 

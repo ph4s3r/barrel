@@ -3,12 +3,13 @@ import sys
 import pickle
 import pprint
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor, as_completed
+# from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from pinecone import Pinecone
 
 from credentials.secrets import secrets
 
+_pinecone_client = None
 
 class PineConeClient:
 
@@ -224,5 +225,8 @@ def process_pc_qr(pinecone_response, mss: float) -> str | None:
 
 
 def get_pinecone_client():
-    """Instantiate a Pinecone client object."""
-    return PineConeClient()
+    """Get or create a singleton Pinecone client instance."""
+    global _pinecone_client
+    if _pinecone_client is None:
+        _pinecone_client = PineConeClient()
+    return _pinecone_client
