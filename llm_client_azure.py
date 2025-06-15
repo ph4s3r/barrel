@@ -90,7 +90,8 @@ Here are the documentation articles as a context to answer the question from:
             model=self.deployment
         )
 
-        print("User query:", prompt)
-        print("RAG Answer:", response.choices[0].message.content)
+        print("[RAG ANSWER]: ")
+        print(response.choices[0].message.content)
+        print("[COMPLETED USER QUERY]", "*"*90)
 
         return response.choices[0].message.content

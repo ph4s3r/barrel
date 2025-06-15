@@ -29,16 +29,18 @@ async def user_prompt(
 ):
     """Endpoint for processing user prompts."""
     ### embedding client client START
+    print("[PROCESSING USER QUERY]", "*"*90)
+    print(f"[PROMPT]: {prompt}")
     result = client.embed(prompt, model="voyage-3-large", input_type="query")
     return_vector = result.embeddings[0]
-    print(f"Embedding token length: {result.total_tokens}, vector dim: {len(return_vector)}")
+    print(f"[EMBEDDING TOKEN LEN]: {result.total_tokens}")
     ### embedding client client END
 
     ### pinecone client START
     pinecone_response = pc_client.query(input_vector=return_vector, top_k=args.top_k)
     context_text = pinecone_response.matches
     vector_ids = [item.id for item in pinecone_response.matches]
-    print("vector ids:", vector_ids)
+    print(f"[VECTOR IDS]: {vector_ids}")
 
     if context_text is None:
         scores = ", ".join(str(match.score) for match in pinecone_response.matches)
